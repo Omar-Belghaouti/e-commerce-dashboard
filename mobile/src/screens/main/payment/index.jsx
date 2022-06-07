@@ -1,5 +1,3 @@
-import {} from "./functions";
-
 import {
   ActivityIndicator,
   FlatList,
@@ -13,9 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { PaymentStyles } from "./styles";
 import { RefundDialog } from "../../../components/refund-dialog";
 import { addPaymentsAction } from "../../../redux/actions/payment/add-payments";
+import { addRefund } from "./functions";
 
 export const PaymentScreen = () => {
-  const [modalVisibility, setModalVisibility] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
   const { payments, refreshing } = useSelector((state) => state.payment);
   const dispatch = useDispatch();
 
@@ -30,9 +29,14 @@ export const PaymentScreen = () => {
         <Text style={PaymentStyles.title}>MONTANT</Text>
       </View>
       <RefundDialog
-        visible={modalVisibility}
+        visible={selectedPayment != null}
+        selectedPayment={selectedPayment}
+        onSubmit={async (amount) => {
+          await addRefund(amount, selectedPayment.id);
+          dispatch(addPaymentsAction());
+        }}
         onClose={() => {
-          setModalVisibility(false);
+          setSelectedPayment(null);
         }}
       />
       {refreshing ? (
@@ -41,10 +45,14 @@ export const PaymentScreen = () => {
         <FlatList
           data={payments}
           keyExtractor={(_, i) => i.toString()}
+          onRefresh={() => dispatch(addPaymentsAction())}
+          refreshing={refreshing}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={PaymentStyles.row}
-              onPress={() => setModalVisibility(true)}
+              onPress={() => {
+                setSelectedPayment(item);
+              }}
             >
               <Text>{new Date(item.createdAt).toDateString()}</Text>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
