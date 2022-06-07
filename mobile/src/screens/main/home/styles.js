@@ -16,6 +16,7 @@ export const HomeStyles = StyleSheet.create({
     justifyContent: "space-between",
     flexWrap: "wrap",
     padding: 10,
+    width: "100%",
   },
   column: {
     flexDirection: "column",
