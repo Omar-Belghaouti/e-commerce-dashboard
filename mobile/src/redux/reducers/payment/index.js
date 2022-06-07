@@ -1,9 +1,9 @@
-const initialState = { };
+const initialState = {
+  payments: [],
+  refreshing: false,
+};
 
-export const payment = (
-  state = initialState,
-  action,
-) => {
+export const payment = (state = initialState, action) => {
   switch (action.type) {
     case "PAYMENT_ADD_PAYMENTS":
       return { ...state, ...action.payload };
