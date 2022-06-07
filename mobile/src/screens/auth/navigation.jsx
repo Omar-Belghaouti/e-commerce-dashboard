@@ -5,13 +5,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 const { Navigator, Screen } = createStackNavigator();
 
-
 export const Navigation = () => {
   return (
     <Navigator
       screenOptions={{
         headerShown: false,
       }}
+      initialRouteName="login"
     >
       <Screen name="login" component={LoginScreen} />
       <Screen name="signup" component={SignupScreen} />
